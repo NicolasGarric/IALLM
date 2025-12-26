@@ -1,0 +1,73 @@
+DOSSIER INTERNE — Affaire “Lexbridge / Aster & Cie” — Synthèse chronologique et clauses opérationnelles (anonymisé)
+Version : 1.3
+Dernière mise à jour : 12/11/2025
+Auteur : Pôle Contentieux & Contrats — Cabinet Parenti
+
+1. Parties, contexte et périmètre
+
+La société Lexbridge SAS (ci-après “Lexbridge”), spécialisée dans la distribution de matériel médical, a conclu le 15/02/2024 un contrat-cadre de prestations informatiques avec Aster & Cie (ci-après “Aster”), ESN basée à Paris. Le contrat porte sur la maintenance corrective et évolutive d’un outil interne de gestion des stocks, nommé Orion, utilisé par environ 240 utilisateurs.
+
+Le contrat prévoit une période initiale ferme de 12 mois, puis un renouvellement tacite par périodes de 6 mois. Les échanges opérationnels se font via un canal dédié sur un outil de ticketing, avec un engagement de traitement des incidents selon trois niveaux : P1, P2, P3.
+
+2. Clauses clés (extraits simplifiés)
+
+2.1. SLA et pénalités
+Le contrat prévoit un SLA de prise en charge et de rétablissement :
+
+P1 : prise en charge sous 2 heures ouvrées, rétablissement sous 8 heures ouvrées.
+
+P2 : prise en charge sous 8 heures ouvrées, rétablissement sous 3 jours ouvrés.
+
+P3 : prise en charge sous 5 jours ouvrés, rétablissement “best effort”.
+
+En cas de non-respect répété du SLA sur un mois, Lexbridge peut appliquer une pénalité forfaitaire plafonnée à 5 % de la facture mensuelle concernée. Toutefois, la pénalité est exclue si l’incident résulte d’une “cause extérieure” listée à l’article 9.2, notamment une indisponibilité du prestataire d’hébergement de Lexbridge au-delà de 4 heures.
+
+2.2. Dépassement de budget et validation
+Tout dépassement de budget supérieur à 2 500 € HT sur une même demande doit faire l’objet d’un avenant signé par un représentant habilité de Lexbridge. À défaut d’avenant, Lexbridge n’est pas tenue de régler le dépassement.
+
+2.3. Confidentialité renforcée
+Les annexes comportent une clause de confidentialité renforcée interdisant la diffusion de captures d’écran de l’outil Orion hors du périmètre des équipes autorisées. Toute violation expose à une indemnité forfaitaire de 12 000 € sans préjudice des dommages-intérêts complémentaires.
+
+2.4. Résiliation
+La résiliation “pour convenance” est possible à tout moment, avec un préavis de 45 jours calendaires, par lettre recommandée. La résiliation “pour faute” nécessite une mise en demeure et un délai de remédiation de 15 jours.
+
+3. Chronologie détaillée des faits
+
+15/02/2024 : Signature du contrat-cadre.
+20/03/2024 : Mise en production d’une version Orion 3.2 avec un module de suivi des lots. Aster fournit un livrable, et Lexbridge signe un PV de recette “avec réserves mineures” portant sur l’export CSV.
+
+07/06/2024 : Premier incident P1 : blocage total de l’écran “Réceptions”. La prise en charge est effectuée à 10h18, rétablissement à 19h02. Lexbridge estime que le délai de rétablissement dépasse la fenêtre de 8 heures ouvrées si l’on calcule à partir de 9h00. Aster conteste, évoquant un début d’incident réel à 11h05 selon les logs.
+
+18/09/2024 : Demande de changement : “réconciliation automatique des stocks” estimée à 9 800 € HT. Un devis est envoyé, mais aucun avenant signé n’est retrouvé dans l’outil documentaire. Aster réalise néanmoins une partie des travaux (environ 60 %) en octobre 2024.
+
+02/11/2024 : Réunion de pilotage. Lexbridge indique que toute poursuite au-delà de l’estimatif initial doit être stoppée tant que l’avenant n’est pas signé. Aster répond qu’un accord oral aurait été donné par le responsable d’exploitation de Lexbridge, mais ce dernier n’a pas délégation de signature.
+
+05/12/2024 : Deuxième incident P1 : rupture de synchronisation avec le scanner d’entrepôt. Prise en charge à 14h40, rétablissement à 17h05. Aucun désaccord sur ce point.
+
+12/01/2025 : Lexbridge change d’hébergeur (migration). Pendant la migration, plusieurs indisponibilités surviennent. Aster affirme que certains retards de résolution sont liés à l’infrastructure de Lexbridge, donc “cause extérieure” au sens de l’article 9.2.
+
+03/03/2025 : Lexbridge reçoit une facture Aster incluant un poste “Travaux réconciliation stocks — complément” de 3 600 € HT. Lexbridge refuse de payer au motif : absence d’avenant alors que dépassement > 2 500 € HT. Aster maintient que les livrables ont été intégrés et utilisés.
+
+11/04/2025 : Incident P2 : dysfonctionnement sur l’export CSV (colonnes inversées). Prise en charge le jour même, correction livrée en 4 jours ouvrés. Lexbridge qualifie l’événement comme P2 mais considère qu’il devait être P1 en raison de l’impact sur la comptabilité. Aucun reclassement officiel n’a été réalisé dans l’outil de ticketing.
+
+29/05/2025 : Un collaborateur de Aster envoie par erreur à un tiers une capture d’écran d’Orion contenant des identifiants utilisateurs. Lexbridge invoque la clause de confidentialité renforcée et réclame l’indemnité forfaitaire de 12 000 €. Aster répond que la capture ne contenait pas de données patients, seulement des identifiants internes, et propose un geste commercial de 2 000 €.
+
+02/07/2025 : Lexbridge notifie une mise en demeure pour faute, demandant une remédiation sous 15 jours concernant : amélioration du processus de validation des changements, et renforcement de la sécurité des échanges. Aster conteste certains points, accepte néanmoins un plan d’action.
+
+22/08/2025 : Lexbridge envisage une résiliation pour convenance, mais hésite en raison d’un pic d’activité prévu en septembre. Une note interne propose une résiliation effective au 15/10/2025 si notification avant le 01/09/2025 (préavis 45 jours).
+
+10/09/2025 : Nouveau P1 : indisponibilité d’Orion pendant 6h. Aster explique que l’origine est une panne chez l’hébergeur de Lexbridge et évoque la “cause extérieure” (indisponibilité > 4h).
+
+30/10/2025 : Réunion de conciliation. Lexbridge propose : paiement de 1 800 € sur la facture contestée, abandon des pénalités SLA, mais maintien de la demande de 12 000 € au titre de confidentialité. Aster propose : abandon du complément de 3 600 €, paiement d’un mois de maintenance offert, et plafonnement de l’indemnité de confidentialité à 4 000 €.
+
+4. Points de décision (interne)
+
+Vérifier si l’absence d’avenant rend la créance de 3 600 € contestable au regard de l’article 2.2.
+
+Évaluer la qualification P1/P2 des incidents et l’applicabilité des pénalités SLA.
+
+Apprécier si la clause d’indemnité forfaitaire de confidentialité est applicable “en l’état” (capture envoyée à un tiers).
+
+Étudier l’opportunité d’une résiliation pour convenance versus pour faute (risque probatoire + calendrier).
+
+FIN DU DOCUMENT
