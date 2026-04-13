@@ -1,0 +1,304 @@
+🅰️ PARCOURS A — INGESTION D’UN DOCUMENT
+
+Objectif : transformer un fichier brut → données vectorisées exploitables
+
+Étape A0 — Configuration globale (toujours en premier)
+📄 app/config.py
+
+👉 C’est le tout premier fichier logique du projet
+
+Il est chargé dès que l’app démarre.
+
+Il définit :
+
+la clé OpenAI
+
+les modèles utilisés
+
+les chemins disque
+
+les paramètres RAG (TOP_K)
+
+📌 Tout le reste dépend de lui
+➡️ Aucun autre fichier ne fonctionne correctement sans settings
+
+Étape A1 — Interface utilisateur (upload)
+📄 pages/2_Documents.py
+
+👉 Point d’entrée du parcours ingestion côté UI.
+
+Quand l’utilisateur :
+
+sélectionne un fichier
+
+clique sur “Uploader”
+
+➡️ ce fichier orchestre le processus, mais ne fait pas le travail lui-même.
+
+Il appelle ensuite dans cet ordre :
+
+Étape A2 — Sauvegarde physique du fichier
+📄 app/storage.py
+
+Fonction appelée :
+
+save_upload(filename, raw)
+
+
+📌 Rôle :
+
+crée data/uploads/ si nécessaire
+
+sécurise le nom du fichier
+
+écrit le fichier sur disque
+
+➡️ À ce stade :
+
+le fichier existe physiquement
+
+il n’est PAS encore indexé
+
+aucune IA n’est impliquée
+
+Étape A3 — Lancement de l’indexation
+
+Toujours depuis :
+
+📄 pages/2_Documents.py
+
+Appel clé :
+
+index_file(filename, raw)
+
+
+👉 On entre maintenant dans le pipeline RAG
+
+Étape A4 — Indexation globale
+📄 app/indexer.py
+
+👉 Chef d’orchestre du pipeline d’ingestion
+
+C’est ici que tout s’enchaîne.
+
+A4.1 — Parsing selon le type de fichier
+
+Dans indexer.py :
+
+_parse_file_to_text()
+
+
+➡️ Redirection vers :
+
+Type	Fichier
+.txt	parse_txt()
+.csv	parse_csv()
+.html	parse_html()
+Étape A5 — Parsing + nettoyage
+📄 app/preprocess.py
+
+Chaque parser :
+
+transforme le fichier en texte brut
+
+appelle clean_text()
+
+📌 Ce fichier :
+
+enlève le bruit technique
+
+unifie tous les formats
+
+➡️ Sortie : une seule string propre
+
+Étape A6 — Découpage en chunks
+
+Toujours dans :
+
+📄 app/preprocess.py
+
+Fonction :
+
+chunk_text(text)
+
+
+📌 Effet :
+
+découpe le texte en morceaux de ~1200 caractères
+
+ajoute un overlap
+
+➡️ C’est ici que la notion de “chunk” naît
+
+Étape A7 — Embeddings des chunks
+
+Retour dans :
+
+📄 app/indexer.py
+
+Appel :
+
+client.embeddings.create(...)
+
+
+📄 Client fourni par :
+
+app/llm.py
+
+configuré via app/config.py
+
+📌 Chaque chunk devient :
+
+un vecteur numérique
+
+représentant son sens
+
+Étape A8 — Stockage vectoriel
+📄 app/vectorstore.py
+
+Fonction :
+
+upsert_chunks(...)
+
+
+📌 Stocke :
+
+le texte du chunk
+
+son embedding
+
+ses métadonnées (source, chunk_id)
+
+➡️ Fin du parcours ingestion
+➡️ Le document est maintenant interrogeable
+
+🅱️ PARCOURS B — QUESTION / RÉPONSE (RAG)
+
+Objectif : transformer une question → réponse justifiée
+
+Étape B1 — Interface Chat
+📄 pages/1_Chat.py
+
+👉 Point d’entrée utilisateur pour une question.
+
+Quand l’utilisateur tape une question :
+
+elle est ajoutée à l’historique
+
+la fonction RAG est appelée
+
+Étape B2 — Embedding de la question
+
+Dans :
+
+📄 pages/1_Chat.py
+
+Fonction :
+
+answer_with_rag(question)
+
+
+➡️ Appel :
+
+client.embeddings.create(...)
+
+
+📌 Même modèle que pour les documents
+➡️ cohérence sémantique
+
+Étape B3 — Recherche vectorielle
+📄 app/vectorstore.py
+
+Fonction :
+
+query_chunks(query_embedding, top_k)
+
+
+📌 Chroma retourne :
+
+les chunks les plus proches
+
+leurs métadonnées
+
+leurs distances
+
+➡️ C’est le “Retrieval” de RAG
+
+Étape B4 — Construction du contexte
+📄 pages/1_Chat.py
+
+Fonction :
+
+build_context(docs, metas)
+
+
+📌 Concatène :
+
+texte exact des chunks
+
+source
+
+numéro de chunk
+
+➡️ Le contexte est explicite et traçable
+
+Étape B5 — Prompt système strict
+
+Toujours dans :
+
+📄 pages/1_Chat.py
+
+Tu imposes :
+
+réponse basée uniquement sur le contexte
+
+preuve copiée/collée
+
+source obligatoire
+
+fallback “Je ne sais pas…”
+
+📌 C’est le cœur de l’anti-hallucination
+
+Étape B6 — Appel LLM
+📄 app/llm.py
+
+Via :
+
+client.chat.completions.create(...)
+
+
+📌 Le LLM :
+
+ne peut répondre que via le contexte
+
+est vérifié après coup
+
+Étape B7 — Validation de la réponse
+
+Toujours dans pages/1_Chat.py :
+
+if not all(x in answer for x in required):
+
+
+📌 Si le format n’est pas respecté :
+➡️ réponse rejetée
+
+Étape B8 — Affichage UI + debug
+
+affichage réponse
+
+affichage preuve
+
+affichage sources + distances
+
+➡️ Fin du parcours question
+
+🧠 Résumé ultra synthétique (à mémoriser)
+config.py        → paramètres globaux
+storage.py      → fichiers physiques
+preprocess.py   → texte propre + chunks
+indexer.py      → pipeline ingestion
+vectorstore.py  → base sémantique
+llm.py          → accès OpenAI
+pages/*.py      → orchestration UI

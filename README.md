@@ -133,6 +133,8 @@ Notes :
 
 ## 6) Lancer l’application
 
+source .venv/bin/activate
+
 Avec la venv activée :
 
 streamlit run Home.py
